@@ -6,15 +6,8 @@ import { UsersModule } from './users/users.module';
 import { AppDataSourceOptions } from 'typeorm.config';
 
 @Module({
-  imports: [
-    TypeOrmModule.forRoot(AppDataSourceOptions),
-    UsersModule,
-  ],
-  controllers: [
-    AppController,
-  ],
-  providers: [
-    AppService,
-  ],
+  imports: [TypeOrmModule.forRoot(AppDataSourceOptions), UsersModule],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
