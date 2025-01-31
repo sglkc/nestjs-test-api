@@ -16,8 +16,8 @@ export class UsersService {
     return this.usersRepository.find();
   }
 
-  async findOne(id: User['id']): Promise<User | null> {
-    return this.usersRepository.findOneBy({ id });
+  async findOne(query: Partial<User>): Promise<User | null> {
+    return this.usersRepository.findOneBy(query);
   }
 
   async create(userDto: CreateUserDto): Promise<User> {

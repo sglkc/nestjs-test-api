@@ -23,8 +23,8 @@ export class UsersController {
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<User | null> {
-    return this.usersService.findOne(Number(id));
+  findOne(@Param('id') id: number): Promise<User | null> {
+    return this.usersService.findOne({ id });
   }
 
   @Post()
