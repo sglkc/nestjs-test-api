@@ -10,7 +10,11 @@ import { AppDataSourceOptions } from 'typeorm.config';
     TypeOrmModule.forRoot(AppDataSourceOptions),
     UsersModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [
+    AppController,
+  ],
+  providers: [
+    AppService,
+  ],
 })
 export class AppModule {}
