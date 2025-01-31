@@ -15,6 +15,13 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Auth Test API')
     .setDescription('Basic auth with NestJS')
+    .addSecurity('token', {
+      type: 'http',
+      scheme: 'bearer',
+      in: 'header',
+      bearerFormat: 'JWT',
+    })
+    .addSecurityRequirements('token')
     .build();
 
   const documentFactory = () => SwaggerModule.createDocument(app, config);
