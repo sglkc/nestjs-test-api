@@ -1,0 +1,94 @@
+services:
+  # Production app service
+  app:
+    profiles:
+      - prod
+    build:
+      context: .
+      target: production  # Use the production stage
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=${DB_USER:-postgres}
+      - DB_PASS=${DB_PASS:-postgres}
+      - DB_NAME=${DB_NAME:-kuasar}
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  # Development app service
+  app-dev:
+    profiles:
+      - dev
+    build:
+      context: .
+      target: dev-deps  # Use the dev-deps stage
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app  # Mount local code for hot-reloading
+      - /app/node_modules  # Isolate node_modules
+    environment:
+      - NODE_ENV=development
+      - DB_HOST=db-dev
+      - DB_PORT=5432
+      - DB_USER=${DB_USER:-postgres}
+      - DB_PASS=${DB_PASS:-postgres}
+      - DB_NAME=${DB_NAME:-kuasar_dev}
+    command: pnpm run start:dev  # Enable hot-reloading
+    depends_on:
+      - db-dev
+    networks:
+      - app-network
+
+  # Production database service
+  db:
+    profiles:
+      - prod
+    image: postgres:16-alpine
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASS:-postgres}
+      POSTGRES_DB: ${DB_NAME:-kuasar}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-kuasar}"]
+      interval: 5s
+      retries: 5
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+
+  # Development database service
+  db-dev:
+    profiles:
+      - dev
+    image: postgres:16-alpine
+    volumes:
+      - postgres-data-dev:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASS:-postgres}
+      POSTGRES_DB: ${DB_NAME:-kuasar_dev}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-kuasar_dev}"]
+      interval: 5s
+      retries: 5
+    ports:
+      - "5433:5432"  # Use a different port to avoid conflicts
+    networks:
+      - app-network
+
+volumes:
+  postgres-data:  # Production database volume
+  postgres-data-dev:  # Development database volume
+
+networks:
+  app-network:
+    driver: bridge
