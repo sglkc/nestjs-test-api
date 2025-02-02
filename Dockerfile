@@ -33,5 +33,8 @@ COPY --from=prod-deps /app/node_modules /app/node_modules
 COPY --from=build /app/dist /app/dist
 COPY package.json .
 
+COPY ./*.sh .
+RUN chmod +x ./*.sh
+
 EXPOSE 3000
-CMD [ "pnpm", "start:prod" ]
+CMD [ "./docker-run.sh", "pnpm", "start:prod" ]

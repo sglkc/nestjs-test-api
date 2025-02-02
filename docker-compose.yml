@@ -39,7 +39,7 @@ services:
       - DB_USER=${DB_USER:-postgres}
       - DB_PASS=${DB_PASS:-postgres}
       - DB_NAME=${DB_NAME:-kuasar_dev}
-    command: pnpm run start:dev  # Enable hot-reloading
+    command: ./docker-run.sh pnpm start:dev  # Enable hot-reloading
     depends_on:
       - db-dev
     networks:
