@@ -4,10 +4,13 @@ import {
   Injectable,
   NotFoundException,
   UnauthorizedException,
+  UnprocessableEntityException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from '../users/users.service';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { User } from 'src/users/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -16,7 +19,35 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signIn(username: string, pass: string): Promise<{ token: string }> {
+  async signToken(user: User) {
+    const payload = {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+    };
+
+    return await this.jwtService.signAsync(payload);
+  }
+
+  async register(
+    userDto: CreateUserDto,
+  ): Promise<{ user: User; token: string }> {
+    const user = await this.usersService.create(userDto);
+
+    if (!user) {
+      throw new UnprocessableEntityException();
+    }
+
+    return {
+      token: await this.signToken(user),
+      user,
+    };
+  }
+
+  async signIn(
+    username: string,
+    pass: string,
+  ): Promise<{ user: User; token: string }> {
     const user = await this.usersService.findOne({ username });
 
     if (!user) {
@@ -27,13 +58,9 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
-    const payload = {
-      id: user.id,
-      username,
+    return {
+      token: await this.signToken(user),
+      user,
     };
-
-    const token = await this.jwtService.signAsync(payload, {});
-
-    return { token };
   }
 }

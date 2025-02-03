@@ -3,6 +3,7 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Get,
+  NotFoundException,
   Param,
   Post,
   UseInterceptors,
@@ -25,10 +26,10 @@ export class UsersController {
 
   @UseInterceptors(ClassSerializerInterceptor)
   @ErrorResponse({
-    description: '',
+    description: 'Not found',
     // data: Failed,
-    status: 400,
-    message: '',
+    status: 404,
+    message: 'User id not found',
   })
   @SuccessResponse({
     description: 'User is created',
@@ -37,12 +38,18 @@ export class UsersController {
     data: CreateUserDto,
   })
   @Get(':id')
-  findOne(@Param('id') id: number): Promise<User | null> {
-    return this.usersService.findOne({ id });
+  async findOne(@Param('id') id: number): Promise<User | null> {
+    const user = await this.usersService.findOne({ id });
+
+    if (!user) {
+      throw new NotFoundException()
+    }
+
+    return user;
   }
 
   @Post()
   async create(@Body() userDto: CreateUserDto): Promise<User | null> {
-    return this.usersService.create(userDto);
+    return await this.usersService.create(userDto);
   }
 }
