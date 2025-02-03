@@ -10,8 +10,8 @@ import {
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
 import { User } from './user.entity';
-import { SuccessResponse } from 'src/utils/decorators/success-response.decorator';
-import { ErrorResponse } from 'src/utils/decorators/error-response.decorator';
+import { SuccessResponse } from '../responses/decorator/success.decorator';
+import { ErrorResponse } from '../responses/decorator/error.decorator';
 
 @Controller('users')
 export class UsersController {
