@@ -7,7 +7,7 @@ services:
       context: .
       target: production  # Use the production stage
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
     environment:
       - NODE_ENV=production
       - DB_HOST=db
@@ -28,7 +28,7 @@ services:
       context: .
       target: dev-deps  # Use the dev-deps stage
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
     volumes:
       - .:/app  # Mount local code for hot-reloading
       - /app/node_modules  # Isolate node_modules
@@ -61,7 +61,7 @@ services:
       interval: 5s
       retries: 5
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
     networks:
       - app-network
 
@@ -81,7 +81,7 @@ services:
       interval: 5s
       retries: 5
     ports:
-      - "5433:5432"  # Use a different port to avoid conflicts
+      - "127.0.0.1:5433:5432"  # Use a different port to avoid conflicts
     networks:
       - app-network
 
