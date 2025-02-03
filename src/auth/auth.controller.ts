@@ -12,6 +12,7 @@ import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
 import { AuthUser } from './auth-user.decorator';
 import { User } from 'src/users/user.entity';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
@@ -23,6 +24,7 @@ export class AuthController {
     return this.authService.signIn(signInDto.username, signInDto.password);
   }
 
+  @ApiBearerAuth('token')
   @UseGuards(AuthGuard)
   @Get('profile')
   getProfile(@AuthUser() user: User) {

@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ResponseInterceptor } from './utils/interceptors/success-response.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -10,6 +11,10 @@ async function bootstrap() {
     new ValidationPipe({
       transform: true,
     }),
+  );
+
+  app.useGlobalInterceptors(
+    new ResponseInterceptor(),
   );
 
   const config = new DocumentBuilder()
@@ -21,7 +26,6 @@ async function bootstrap() {
       in: 'header',
       bearerFormat: 'JWT',
     })
-    .addSecurityRequirements('token')
     .build();
 
   const documentFactory = () => SwaggerModule.createDocument(app, config);
