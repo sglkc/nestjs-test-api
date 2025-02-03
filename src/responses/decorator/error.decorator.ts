@@ -1,13 +1,13 @@
-import { applyDecorators } from '@nestjs/common';
+import { applyDecorators, Type } from '@nestjs/common';
 import { ApiExtraModels, ApiResponse, getSchemaPath } from '@nestjs/swagger';
-import { ErrorResponseDto } from '../dto/error-response.dto';
+import { ErrorResponseDto } from '../dto/error.dto';
 
 interface ErrorResponseMetadata {
   description: string;
 }
 
 // https://docs.nestjs.com/openapi/operations#advanced-generic-apiresponse
-export const ErrorResponse = <T extends Function>(
+export const ErrorResponse = <T extends Type<unknown>>(
   data: ErrorResponseDto<T> & ErrorResponseMetadata,
 ) => {
   return applyDecorators(
@@ -18,13 +18,14 @@ export const ErrorResponse = <T extends Function>(
       schema: {
         allOf: [
           { $ref: getSchemaPath(ErrorResponseDto) },
-          // {
-          //   properties: {
-          //     data: {
-          //       $ref: getSchemaPath(data.),
-          //     },
-          //   },
-          // },
+          {
+            properties: {
+              status: {
+                type: 'number',
+                default: data.status,
+              },
+            },
+          },
         ],
       },
     }),
