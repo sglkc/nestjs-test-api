@@ -11,6 +11,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
 import { User } from './user.entity';
 import { SuccessResponse } from 'src/utils/decorators/success-response.decorator';
+import { ErrorResponse } from 'src/utils/decorators/error-response.decorator';
 
 @Controller('users')
 export class UsersController {
@@ -23,6 +24,12 @@ export class UsersController {
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
+  @ErrorResponse({
+    description: '',
+    // data: Failed,
+    status: 400,
+    message: '',
+  })
   @SuccessResponse({
     description: 'User is created',
     message: 'User created',

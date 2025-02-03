@@ -1,4 +1,4 @@
-import { applyDecorators, Type } from '@nestjs/common';
+import { applyDecorators } from '@nestjs/common';
 import { ApiExtraModels, ApiOkResponse, getSchemaPath } from '@nestjs/swagger';
 import { SuccessResponseDto } from '../dto/success-response.dto';
 
@@ -27,6 +27,6 @@ export const SuccessResponse = <T extends Function>(
           },
         ],
       },
-    })
+    }),
   );
-}
+};
