@@ -1,19 +1,19 @@
-import { ExecutionContext, HttpException, HttpStatus } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
+import { HttpException, HttpStatus } from '@nestjs/common';
 import { ErrorResponse } from './interface/error.interface';
-import { ERROR_RESPONSE_MESSAGE } from './decorator/error.decorator';
+import { ResponseMessages } from './decorator/message.decorator';
 
 export function handleError(
   error: Error,
-  context?: ExecutionContext,
-  reflector?: Reflector,
+  messages?: ResponseMessages,
 ): ErrorResponse {
   const status: HttpStatus =
     error instanceof HttpException
       ? error.getStatus()
       : HttpStatus.INTERNAL_SERVER_ERROR;
 
-  let message = error.message;
+  const message = messages
+    ? (messages[status] ?? 'internalServerError')
+    : error.message;
   let errors: string[] = [];
 
   if (error instanceof HttpException) {
@@ -21,24 +21,12 @@ export function handleError(
       message: string | string[];
       errors?: string[];
     };
-    errors = res.errors
+
+    errors = Array.isArray(res.errors)
       ? res.errors
       : Array.isArray(res.message)
         ? res.message
         : [res.message];
-
-    if (reflector && context) {
-      const errorResponses =
-        reflector.get<ErrorResponse[]>(
-          ERROR_RESPONSE_MESSAGE,
-          context.getHandler(),
-        ) || [];
-
-      const matchedError = errorResponses.find((err) => err.status === status);
-      if (matchedError) {
-        message = matchedError.message;
-      }
-    }
   }
 
   return {

@@ -5,6 +5,7 @@ import {
   CallHandler,
   HttpException,
   Type,
+  HttpStatus,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Request, Response } from 'express';
@@ -12,7 +13,10 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { SuccessResponse } from './interface/success.interface';
 import { handleError } from './response.utils';
-import { SUCCESS_RESPONSE_MESSAGE } from './decorator/success.decorator';
+import {
+  RESPONSE_MESSAGES,
+  ResponseMessages,
+} from './decorator/message.decorator';
 
 @Injectable()
 export class ResponseInterceptor<T extends Type | Type[]>
@@ -34,20 +38,25 @@ export class ResponseInterceptor<T extends Type | Type[]>
     }
 
     const response = ctx.getResponse<Response>();
-    const message =
-      this.reflector.get<string>(
-        SUCCESS_RESPONSE_MESSAGE,
+    const messages =
+      this.reflector.get<ResponseMessages | undefined>(
+        RESPONSE_MESSAGES,
         context.getHandler(),
-      ) || 'success';
+      ) ?? {};
 
     return next.handle().pipe(
-      map<T, SuccessResponse>((data) => ({
-        status: response.statusCode,
-        message,
-        data,
-      })),
+      map<T, SuccessResponse>((data) => {
+        const status: HttpStatus = response.statusCode;
+        const message = messages[status] ?? 'success';
+
+        return {
+          status,
+          message,
+          data,
+        } satisfies SuccessResponse;
+      }),
       catchError((error: Error) => {
-        const response = handleError(error, context, this.reflector);
+        const response = handleError(error, messages);
         return throwError(() => new HttpException(response, response.status));
       }),
     );

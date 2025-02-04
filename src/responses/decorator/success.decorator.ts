@@ -1,15 +1,14 @@
-import { applyDecorators, SetMetadata, Type } from '@nestjs/common';
-import { ApiExtraModels, ApiResponse } from '@nestjs/swagger';
+import { applyDecorators, Type } from '@nestjs/common';
+import { ApiResponse } from '@nestjs/swagger';
 import {
   SuccessResponseDto,
   createSuccessResponseDto,
 } from '../dto/success.dto';
+import { ResponseMessage } from './message.decorator';
 
 interface SuccessResponseMetadata {
   description: string;
 }
-
-export const SUCCESS_RESPONSE_MESSAGE = 'successResponseMessage';
 
 /**
  * Apply success response with custom data model
@@ -21,8 +20,7 @@ export const SuccessResponse = <T extends Type | [Type]>(
   const ResponseDto = createSuccessResponseDto(dto);
 
   return applyDecorators(
-    SetMetadata(SUCCESS_RESPONSE_MESSAGE, dto.message),
-    ApiExtraModels(ResponseDto),
+    ResponseMessage(dto),
     ApiResponse({
       status: dto.status ?? 200,
       description: dto.description,
