@@ -16,7 +16,7 @@ export const ErrorResponse = (
     (_target, _key, descriptor: PropertyDescriptor) => {
       let existingErrors = Reflect.getMetadata(
         ERROR_RESPONSE_MESSAGE,
-        descriptor.value as Object,
+        descriptor.value as object,
       ) as ErrorResponseMetadata[] | undefined;
 
       if (!existingErrors) {
@@ -28,7 +28,7 @@ export const ErrorResponse = (
       Reflect.defineMetadata(
         ERROR_RESPONSE_MESSAGE,
         existingErrors,
-        descriptor.value as Object,
+        descriptor.value as object,
       );
     },
     ApiExtraModels(ErrorResponseDto),
