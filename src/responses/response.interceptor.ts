@@ -4,6 +4,7 @@ import {
   ExecutionContext,
   CallHandler,
   HttpException,
+  Type,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Response } from 'express';
@@ -14,15 +15,15 @@ import { handleError } from './response.utils';
 import { SUCCESS_RESPONSE_MESSAGE } from './decorator/success.decorator';
 
 @Injectable()
-export class ResponseInterceptor<T>
-  implements NestInterceptor<T, SuccessResponse<T>>
+export class ResponseInterceptor<T extends Type | Type[]>
+  implements NestInterceptor<T, SuccessResponse>
 {
   constructor(private readonly reflector: Reflector) {}
 
   intercept(
     context: ExecutionContext,
     next: CallHandler,
-  ): Observable<SuccessResponse<T>> {
+  ): Observable<SuccessResponse> {
     const ctx = context.switchToHttp();
     const response = ctx.getResponse<Response>();
     const message =
@@ -32,7 +33,7 @@ export class ResponseInterceptor<T>
       ) || 'success';
 
     return next.handle().pipe(
-      map<T, SuccessResponse<T>>((data) => ({
+      map<T, SuccessResponse>((data) => ({
         status: response.statusCode,
         message,
         data,

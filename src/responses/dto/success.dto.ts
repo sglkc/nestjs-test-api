@@ -1,12 +1,40 @@
-import { HttpStatus } from '@nestjs/common';
+import { HttpStatus, Type } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
+import { SuccessResponse } from '../interface/success.interface';
 
-export class SuccessResponseDto<T> {
+export function createSuccessResponseDto<T extends Type | [Type]>(
+  dto: SuccessResponseDto<T>,
+) {
+  abstract class SuccessResponse extends SuccessResponseDto<T> {
+    @ApiProperty({ default: dto.message })
+    message: string = 'success';
+
+    @ApiProperty({ default: dto.status, enum: HttpStatus })
+    status: HttpStatus = 200;
+
+    @ApiProperty({ type: dto.data })
+    data: T;
+  }
+
+  const data: Type = Array.isArray(dto.data) ? dto.data[0] : dto.data;
+  const schemaName = `${data.name}${Array.isArray(dto.data) ? 'Array' : ''}`;
+
+  Reflect.defineProperty(SuccessResponse, 'name', {
+    writable: false,
+    value: `SuccessResponseOf${schemaName}`,
+  });
+
+  return SuccessResponse;
+}
+
+export class SuccessResponseDto<T extends Type | [Type]>
+  implements Partial<SuccessResponse<T>>
+{
   @ApiProperty({ default: 'success' })
-  message?: string;
+  message?: string = 'success';
 
   @ApiProperty({ default: 200, enum: HttpStatus })
-  status?: number;
+  status?: HttpStatus = 200;
 
   @ApiProperty()
   data: T;

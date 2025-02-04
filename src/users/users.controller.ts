@@ -18,26 +18,28 @@ import { ErrorResponse } from '../responses/decorator/error.decorator';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @UseInterceptors(ClassSerializerInterceptor)
   @Get()
+  @UseInterceptors(ClassSerializerInterceptor)
+  @SuccessResponse({
+    description: 'Get all users',
+    data: [CreateUserDto],
+  })
   findAll(): Promise<User[]> {
     return this.usersService.findAll();
   }
 
+  @Get(':id')
   @UseInterceptors(ClassSerializerInterceptor)
   @ErrorResponse({
-    description: 'Not found',
-    // data: Failed,
     status: 404,
-    message: 'User id not found',
+    description: 'Not found',
+    message: 'userNotFound',
   })
   @SuccessResponse({
-    description: 'User is created',
-    message: 'User created',
     status: 201,
+    description: 'User profile by id',
     data: CreateUserDto,
   })
-  @Get(':id')
   async findOne(@Param('id') id: number): Promise<User | null> {
     const user = await this.usersService.findOne({ id });
 
