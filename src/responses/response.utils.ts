@@ -4,7 +4,7 @@ import { ErrorResponse } from './interface/error.interface';
 import { ERROR_RESPONSE_MESSAGE } from './decorator/error.decorator';
 
 export function handleError(
-  error: unknown,
+  error: Error,
   context?: ExecutionContext,
   reflector?: Reflector,
 ): ErrorResponse {
@@ -13,12 +13,12 @@ export function handleError(
       ? error.getStatus()
       : HttpStatus.INTERNAL_SERVER_ERROR;
 
-  let message = 'error';
+  let message = error.message;
   let errors: string[] = [];
 
   if (error instanceof HttpException) {
-    const res = error.getResponse() as { message: string | string[] };
-    errors = Array.isArray(res.message) ? res.message : [res.message];
+    const res = error.getResponse() as { message: string | string[], errors?: string[] };
+    errors = res.errors ? res.errors : Array.isArray(res.message) ? res.message : [res.message];
 
     if (reflector && context) {
       const errorResponses =

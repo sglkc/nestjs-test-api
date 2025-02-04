@@ -1,6 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiExtraModels, ApiResponse, getSchemaPath } from '@nestjs/swagger';
-import { ErrorResponseDto } from '../dto/error.dto';
+import { createErrorResponseDto, ErrorResponseDto } from '../dto/error.dto';
 
 interface ErrorResponseMetadata {
   description: string;
@@ -10,8 +10,10 @@ export const ERROR_RESPONSE_MESSAGE = 'errorResponseMessage';
 
 // https://docs.nestjs.com/openapi/operations#advanced-generic-apiresponse
 export const ErrorResponse = (
-  data: ErrorResponseDto & ErrorResponseMetadata,
+  dto: ErrorResponseDto & ErrorResponseMetadata,
 ) => {
+  const ResponseDto = createErrorResponseDto(dto);
+
   return applyDecorators(
     (_target, _key, descriptor: PropertyDescriptor) => {
       let existingErrors = Reflect.getMetadata(
@@ -20,9 +22,9 @@ export const ErrorResponse = (
       ) as ErrorResponseMetadata[] | undefined;
 
       if (!existingErrors) {
-        existingErrors = [data];
+        existingErrors = [dto];
       } else {
-        existingErrors.push(data);
+        existingErrors.push(dto);
       }
 
       Reflect.defineMetadata(
@@ -33,23 +35,9 @@ export const ErrorResponse = (
     },
     ApiExtraModels(ErrorResponseDto),
     ApiResponse({
-      description: data.description,
-      status: data.status,
-      schema: {
-        allOf: [
-          { $ref: getSchemaPath(ErrorResponseDto) },
-          {
-            properties: {
-              status: {
-                default: data.status,
-              },
-              message: {
-                default: data.message,
-              },
-            },
-          },
-        ],
-      },
+      description: dto.description,
+      status: dto.status,
+      type: ResponseDto,
     }),
   );
 };

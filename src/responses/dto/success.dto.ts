@@ -6,11 +6,11 @@ export function createSuccessResponseDto<T extends Type | [Type]>(
   dto: SuccessResponseDto<T>,
 ) {
   abstract class SuccessResponse extends SuccessResponseDto<T> {
-    @ApiProperty({ default: dto.message })
-    message: string = 'success';
-
     @ApiProperty({ default: dto.status, enum: HttpStatus })
-    status: HttpStatus = 200;
+    status: HttpStatus;
+
+    @ApiProperty({ default: dto.message })
+    message: string;
 
     @ApiProperty({ type: dto.data })
     data: T;
@@ -30,11 +30,11 @@ export function createSuccessResponseDto<T extends Type | [Type]>(
 export class SuccessResponseDto<T extends Type | [Type]>
   implements Partial<SuccessResponse<T>>
 {
-  @ApiProperty({ default: 'success' })
-  message?: string = 'success';
-
   @ApiProperty({ default: 200, enum: HttpStatus })
   status?: HttpStatus = 200;
+
+  @ApiProperty({ default: 'success' })
+  message?: string = 'success';
 
   @ApiProperty()
   data: T;

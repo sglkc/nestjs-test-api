@@ -22,14 +22,14 @@ export class AuthGuard implements CanActivate {
     const token = this.extractTokenFromHeader(request);
 
     if (!token) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('unauthorized');
     }
 
     try {
       const payload = await this.jwtService.verifyAsync<SignInDto>(token);
       request.credentials = payload;
     } catch {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('unauthorized');
     }
     return true;
   }

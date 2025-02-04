@@ -46,6 +46,7 @@ export class AuthController {
   @ErrorResponse({
     status: HttpStatus.UNAUTHORIZED,
     description: 'User not found',
+    message: 'wrongCredentials',
   })
   @SuccessResponse({
     status: HttpStatus.OK,
@@ -63,7 +64,7 @@ export class AuthController {
   @ErrorResponse({
     status: HttpStatus.UNAUTHORIZED,
     description: 'User not logged in',
-    message: 'No token',
+    message: 'unauthorized',
   })
   @SuccessResponse({
     description: 'Get currently logged in user',
