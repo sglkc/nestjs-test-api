@@ -38,7 +38,7 @@ export class ResponseInterceptor<T extends Type | Type[]>
         message,
         data,
       })),
-      catchError((error) => {
+      catchError((error: Error) => {
         const response = handleError(error, context, this.reflector);
         return throwError(() => new HttpException(response, response.status));
       }),

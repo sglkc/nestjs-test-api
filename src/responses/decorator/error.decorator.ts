@@ -1,5 +1,5 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiExtraModels, ApiResponse, getSchemaPath } from '@nestjs/swagger';
+import { ApiExtraModels, ApiResponse } from '@nestjs/swagger';
 import { createErrorResponseDto, ErrorResponseDto } from '../dto/error.dto';
 
 interface ErrorResponseMetadata {

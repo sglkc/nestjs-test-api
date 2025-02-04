@@ -17,8 +17,15 @@ export function handleError(
   let errors: string[] = [];
 
   if (error instanceof HttpException) {
-    const res = error.getResponse() as { message: string | string[], errors?: string[] };
-    errors = res.errors ? res.errors : Array.isArray(res.message) ? res.message : [res.message];
+    const res = error.getResponse() as {
+      message: string | string[];
+      errors?: string[];
+    };
+    errors = res.errors
+      ? res.errors
+      : Array.isArray(res.message)
+        ? res.message
+        : [res.message];
 
     if (reflector && context) {
       const errorResponses =

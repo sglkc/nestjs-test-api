@@ -34,7 +34,6 @@ export class UsersController {
     message: 'userNotFound',
   })
   @SuccessResponse({
-    status: 201,
     description: 'User profile by id',
     data: ReadUserDto,
   })

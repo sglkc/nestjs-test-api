@@ -2,7 +2,7 @@ import { HttpStatus } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 import { ErrorResponse } from '../interface/error.interface';
 
-export function createErrorResponseDto(dto: ErrorResponseDto,) {
+export function createErrorResponseDto(dto: ErrorResponseDto) {
   abstract class ErrorResponse extends ErrorResponseDto {
     @ApiProperty({ default: dto.status, enum: HttpStatus })
     status: HttpStatus;

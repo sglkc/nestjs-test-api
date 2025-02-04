@@ -1,5 +1,9 @@
 import { applyDecorators, SetMetadata, Type } from '@nestjs/common';
-import { ApiExtraModels, ApiInternalServerErrorResponse, ApiOkResponse, getSchemaPath } from '@nestjs/swagger';
+import {
+  ApiExtraModels,
+  ApiInternalServerErrorResponse,
+  ApiResponse,
+} from '@nestjs/swagger';
 import {
   SuccessResponseDto,
   createSuccessResponseDto,
@@ -24,7 +28,8 @@ export const SuccessResponse = <T extends Type | [Type]>(
   return applyDecorators(
     SetMetadata(SUCCESS_RESPONSE_MESSAGE, dto.message),
     ApiExtraModels(ResponseDto),
-    ApiOkResponse({
+    ApiResponse({
+      status: dto.status ?? 200,
       description: dto.description,
       type: ResponseDto,
     }),
