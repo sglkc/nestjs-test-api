@@ -1,14 +1,12 @@
 import {
-  Body,
   ClassSerializerInterceptor,
   Controller,
   Get,
   NotFoundException,
   Param,
-  Post,
   UseInterceptors,
 } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
+import { ReadUserDto } from './dto/read-user.dto';
 import { UsersService } from './users.service';
 import { User } from './user.entity';
 import { SuccessResponse } from '../responses/decorator/success.decorator';
@@ -22,7 +20,7 @@ export class UsersController {
   @UseInterceptors(ClassSerializerInterceptor)
   @SuccessResponse({
     description: 'Get all users',
-    data: [CreateUserDto],
+    data: [ReadUserDto],
   })
   findAll(): Promise<User[]> {
     return this.usersService.findAll();
@@ -38,7 +36,7 @@ export class UsersController {
   @SuccessResponse({
     status: 201,
     description: 'User profile by id',
-    data: CreateUserDto,
+    data: ReadUserDto,
   })
   async findOne(@Param('id') id: number): Promise<User | null> {
     const user = await this.usersService.findOne({ id });
@@ -48,10 +46,5 @@ export class UsersController {
     }
 
     return user;
-  }
-
-  @Post()
-  async create(@Body() userDto: CreateUserDto): Promise<User | null> {
-    return await this.usersService.create(userDto);
   }
 }

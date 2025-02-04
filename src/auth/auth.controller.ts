@@ -17,7 +17,7 @@ import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { SuccessResponse } from 'src/responses/decorator/success.decorator';
 import { RegisterDto } from './dto/register.dto';
 import { ErrorResponse } from 'src/responses/decorator/error.decorator';
-import { UserDto } from 'src/users/dto/user.dto';
+import { ReadUserDto } from 'src/users/dto/read-user.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -67,7 +67,7 @@ export class AuthController {
   })
   @SuccessResponse({
     description: 'Get currently logged in user',
-    data: UserDto,
+    data: ReadUserDto,
   })
   getProfile(@AuthUser() user: User) {
     return user;
