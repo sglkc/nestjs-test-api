@@ -16,6 +16,7 @@ async function bootstrap() {
 
   app.useGlobalFilters(new ResponseExceptionFilter());
   app.useGlobalInterceptors(new ResponseInterceptor(app.get(Reflector)));
+  app.enableShutdownHooks();
 
   const config = new DocumentBuilder()
     .setTitle('Auth Test API')

@@ -7,7 +7,7 @@ import {
   Type,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { SuccessResponse } from './interface/success.interface';
@@ -18,6 +18,8 @@ import { SUCCESS_RESPONSE_MESSAGE } from './decorator/success.decorator';
 export class ResponseInterceptor<T extends Type | Type[]>
   implements NestInterceptor<T, SuccessResponse>
 {
+  excludePaths: string[] = ['/health'];
+
   constructor(private readonly reflector: Reflector) {}
 
   intercept(
@@ -25,6 +27,12 @@ export class ResponseInterceptor<T extends Type | Type[]>
     next: CallHandler,
   ): Observable<SuccessResponse> {
     const ctx = context.switchToHttp();
+    const request = ctx.getRequest<Request>();
+
+    if (this.excludePaths.includes(request.path)) {
+      return next.handle() as Observable<SuccessResponse>;
+    }
+
     const response = ctx.getResponse<Response>();
     const message =
       this.reflector.get<string>(
