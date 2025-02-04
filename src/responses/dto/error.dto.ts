@@ -4,7 +4,7 @@ import { ErrorResponse } from '../interface/error.interface';
 
 export function createErrorResponseDto(dto: ErrorResponseDto) {
   abstract class ErrorResponse extends ErrorResponseDto {
-    @ApiProperty({ default: dto.status, enum: HttpStatus })
+    @ApiProperty({ default: dto.status })
     status: HttpStatus;
 
     @ApiProperty({ default: dto.message })
@@ -22,7 +22,7 @@ export function createErrorResponseDto(dto: ErrorResponseDto) {
 }
 
 export class ErrorResponseDto implements Partial<ErrorResponse> {
-  @ApiProperty({ default: 500, enum: HttpStatus })
+  @ApiProperty({ default: 500 })
   status?: HttpStatus = 500;
 
   @ApiProperty({ default: 'error' })

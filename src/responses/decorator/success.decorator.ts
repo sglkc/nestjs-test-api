@@ -1,14 +1,9 @@
 import { applyDecorators, SetMetadata, Type } from '@nestjs/common';
-import {
-  ApiExtraModels,
-  ApiInternalServerErrorResponse,
-  ApiResponse,
-} from '@nestjs/swagger';
+import { ApiExtraModels, ApiResponse } from '@nestjs/swagger';
 import {
   SuccessResponseDto,
   createSuccessResponseDto,
 } from '../dto/success.dto';
-import { ErrorResponseDto } from '../dto/error.dto';
 
 interface SuccessResponseMetadata {
   description: string;
@@ -32,10 +27,6 @@ export const SuccessResponse = <T extends Type | [Type]>(
       status: dto.status ?? 200,
       description: dto.description,
       type: ResponseDto,
-    }),
-    ApiInternalServerErrorResponse({
-      description: 'Unexpected internal error',
-      type: ErrorResponseDto,
     }),
   );
 };
