@@ -32,7 +32,7 @@ export class AuthController {
   @ErrorResponse({
     status: HttpStatus.BAD_REQUEST,
     description: 'User payload is not valid',
-    message: 'userInvalid',
+    message: 'payloadInvalid',
   })
   @SuccessResponse({
     description: 'Register a new user',

@@ -1,4 +1,4 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -13,7 +13,7 @@ async function bootstrap() {
     }),
   );
 
-  app.useGlobalInterceptors(new ResponseInterceptor());
+  app.useGlobalInterceptors(new ResponseInterceptor(app.get(Reflector)));
 
   const config = new DocumentBuilder()
     .setTitle('Auth Test API')

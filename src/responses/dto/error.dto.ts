@@ -1,15 +1,13 @@
 import { HttpStatus } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 
-// TODO: pass errors
-// eslint-disable-next-line
-export class ErrorResponseDto<T> {
+export class ErrorResponseDto {
   @ApiProperty({ default: 'error' })
   message?: string;
 
   @ApiProperty({ default: 400, enum: HttpStatus })
   status?: number;
 
-  // @ApiProperty()
-  // data: T;
+  @ApiProperty()
+  errors?: string[];
 }
