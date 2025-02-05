@@ -20,8 +20,13 @@ export class UsersService {
     return this.usersRepository.findOneBy(query);
   }
 
-  // TODO: checking for unique with SELECT + INSERT may cause race condition
-  // let database decide on uniqueness and handle the error with filters
+  /**
+   * Validate user uniqueness
+   *
+   * @throws {UnprocessableEntityException}
+   * @todo checking for unique with SELECT + INSERT may cause race condition
+   * @todo let database decide on uniqueness and handle the error with filters
+   */
   async validate(user: User): Promise<true | null> {
     const exception = new UnprocessableEntityException();
 

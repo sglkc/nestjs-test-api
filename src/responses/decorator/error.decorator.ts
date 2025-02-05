@@ -7,7 +7,10 @@ interface ErrorResponseMetadata {
   description: string;
 }
 
-// https://docs.nestjs.com/openapi/operations#advanced-generic-apiresponse
+/**
+ * Apply response message decorator and response docs
+ * @url https://docs.nestjs.com/openapi/operations#advanced-generic-apiresponse
+ */
 export const ErrorResponse = (
   dto: ErrorResponseDto & ErrorResponseMetadata,
 ) => {

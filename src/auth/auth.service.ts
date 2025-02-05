@@ -29,11 +29,16 @@ export class AuthService {
     return await this.jwtService.signAsync(payload);
   }
 
+  /**
+   * Validate and register a new user via service
+   * @throws {UnprocessableEntityException}
+   */
   async register(
     userDto: CreateUserDto,
   ): Promise<{ user: User; token: string }> {
     const user = await this.usersService.create(userDto);
 
+    // User service will throw an error, but just in case
     if (!user) {
       throw new UnprocessableEntityException();
     }

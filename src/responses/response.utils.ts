@@ -2,6 +2,9 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 import { ErrorResponse } from './interface/error.interface';
 import { ResponseMessages } from './decorator/message.decorator';
 
+/**
+ * Format error object with default to 500 Internal Server Error
+ */
 export function handleError(
   error: Error,
   messages?: ResponseMessages,

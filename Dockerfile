@@ -37,4 +37,4 @@ COPY ./*.sh .
 RUN chmod +x ./*.sh
 
 EXPOSE 3000
-CMD [ "./docker-run.sh", "pnpm", "start:prod" ]
+CMD [ "./run.sh", "pnpm", "start:prod" ]

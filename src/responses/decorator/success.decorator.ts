@@ -11,7 +11,7 @@ interface SuccessResponseMetadata {
 }
 
 /**
- * Apply success response with custom data model
+ * Apply response message decorator and response docs
  * @url https://docs.nestjs.com/openapi/operations#advanced-generic-apiresponse
  */
 export const SuccessResponse = <T extends Type | [Type]>(

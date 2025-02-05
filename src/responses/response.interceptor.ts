@@ -18,6 +18,10 @@ import {
   ResponseMessages,
 } from './decorator/message.decorator';
 
+/**
+ * Format responses
+ *
+ */
 @Injectable()
 export class ResponseInterceptor<T extends Type | Type[]>
   implements NestInterceptor<T, SuccessResponse>
@@ -38,6 +42,10 @@ export class ResponseInterceptor<T extends Type | Type[]>
     }
 
     const response = ctx.getResponse<Response>();
+
+    /**
+     * Stored response messages from decorators
+     */
     const messages =
       this.reflector.get<ResponseMessages | undefined>(
         RESPONSE_MESSAGES,
@@ -55,6 +63,7 @@ export class ResponseInterceptor<T extends Type | Type[]>
           data,
         } satisfies SuccessResponse;
       }),
+      /// Will be processed again by response filter
       catchError((error: Error) => {
         const response = handleError(error, messages);
         return throwError(() => new HttpException(response, response.status));

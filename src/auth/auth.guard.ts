@@ -17,6 +17,11 @@ export interface AuthRequest extends Request {
   [AUTH_SYMBOL]: User;
 }
 
+/**
+ * Verify JWT token from Bearer header and put User model in request object
+ *
+ * @throws {UnauthorizedException}
+ */
 @Injectable({ scope: Scope.REQUEST })
 export class AuthGuard implements CanActivate {
   constructor(

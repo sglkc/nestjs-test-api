@@ -11,7 +11,12 @@ import { ResponseInterceptor } from './responses/response.interceptor';
 import { ResponseExceptionFilter } from './responses/response.filter';
 import { createErrorResponseDto } from './responses/dto/error.dto';
 
-// https://dev.to/micalevisk/nestjs-tip-how-to-attach-decorators-to-all-controllers-without-at-once-bg7
+/**
+ * Create Swagger document and add default responses to every controller:
+ * - 429 Too Many Requests
+ * - 500 Internal Server Error
+ * @see {@link https://dev.to/micalevisk/nestjs-tip-how-to-attach-decorators-to-all-controllers-without-at-once-bg7|Blog}
+ */
 function setupSwagger(app: INestApplication): OpenAPIObject {
   const controllers = app.get(DiscoveryService).getControllers();
 
@@ -64,6 +69,10 @@ async function bootstrap() {
     }),
   );
 
+  /**
+   * Handle guard errors and uncaught exceptions
+   * @see {@link https://docs.nestjs.com/faq/request-lifecycle#summary}
+   */
   app.useGlobalFilters(new ResponseExceptionFilter());
   app.useGlobalInterceptors(new ResponseInterceptor(app.get(Reflector)));
   app.enableShutdownHooks();

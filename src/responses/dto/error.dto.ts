@@ -2,6 +2,9 @@ import { HttpStatus } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 import { ErrorResponse } from '../interface/error.interface';
 
+/**
+ * Create custom named error response schema for Swagger docs with defaults
+ */
 export function createErrorResponseDto(dto: ErrorResponseDto) {
   abstract class ErrorResponse extends ErrorResponseDto {
     @ApiProperty({ default: dto.status })

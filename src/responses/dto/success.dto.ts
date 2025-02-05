@@ -2,6 +2,9 @@ import { HttpStatus, Type } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 import { SuccessResponse } from '../interface/success.interface';
 
+/**
+ * Create custom named error response schema for Swagger docs with defaults
+ */
 export function createSuccessResponseDto<T extends Type | [Type]>(
   dto: SuccessResponseDto<T>,
 ) {

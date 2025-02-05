@@ -5,6 +5,9 @@ export type ResponseMessages = { [K in HttpStatus]?: string };
 
 export const RESPONSE_MESSAGES = 'responseMessages';
 
+/**
+ * Set response message for current status, message will be used in interceptor
+ */
 export const ResponseMessage =
   (dto: ErrorResponseDto): MethodDecorator =>
   (_target, _key, descriptor: PropertyDescriptor) => {

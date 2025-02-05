@@ -10,7 +10,9 @@ import { handleError } from './response.utils';
 import { ErrorResponse } from './interface/error.interface';
 
 /**
- * Catch HTTP and generic errors
+ * Handle guard errors and uncaught exceptions
+ * Intercepted responses goes here too
+ * @see {@link https://docs.nestjs.com/faq/request-lifecycle#summary}
  */
 @Catch()
 export class ResponseExceptionFilter implements ExceptionFilter {
