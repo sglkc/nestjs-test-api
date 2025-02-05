@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsJWT } from 'class-validator';
-import { UserDto } from 'src/users/dto/user.dto';
+import { UserDto } from '@/users/dto/user.dto';
 
 export class RegisterDto {
   @ApiProperty()

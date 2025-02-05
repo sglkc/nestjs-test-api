@@ -3,9 +3,9 @@ import { APP_GUARD, DiscoveryModule } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
-import { AppDataSourceOptions } from 'typeorm.config';
 import { AuthModule } from './auth/auth.module';
 import { HealthModule } from './health/health.module';
+import { AppDataSourceOptions } from '../typeorm.config';
 
 @Module({
   imports: [

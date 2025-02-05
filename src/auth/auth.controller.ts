@@ -7,17 +7,17 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { SignInDto } from './dto/sign-in.dto';
-import { AuthService } from './auth.service';
-import { AuthGuard } from './auth.guard';
-import { AuthUser } from './auth-user.decorator';
-import { User } from 'src/users/user.entity';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import { SuccessResponse } from 'src/responses/decorator/success.decorator';
+import { SuccessResponse } from '@/responses/decorator/success.decorator';
+import { ErrorResponse } from '@/responses/decorator/error.decorator';
+import { ReadUserDto } from '@/users/dto/read-user.dto';
+import { User } from '@/users/user.entity';
+import { CreateUserDto } from '@/users/dto/create-user.dto';
 import { RegisterDto } from './dto/register.dto';
-import { ErrorResponse } from 'src/responses/decorator/error.decorator';
-import { ReadUserDto } from 'src/users/dto/read-user.dto';
+import { SignInDto } from './dto/sign-in.dto';
+import { AuthGuard } from './auth.guard';
+import { AuthService } from './auth.service';
+import { AuthUser } from './auth-user.decorator';
 
 @Controller('auth')
 export class AuthController {

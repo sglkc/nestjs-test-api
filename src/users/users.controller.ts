@@ -6,11 +6,11 @@ import {
   Param,
   UseInterceptors,
 } from '@nestjs/common';
+import { ErrorResponse } from '@/responses/decorator/error.decorator';
+import { SuccessResponse } from '@/responses/decorator/success.decorator';
 import { ReadUserDto } from './dto/read-user.dto';
 import { UsersService } from './users.service';
 import { User } from './user.entity';
-import { SuccessResponse } from '../responses/decorator/success.decorator';
-import { ErrorResponse } from '../responses/decorator/error.decorator';
 
 @Controller('users')
 export class UsersController {

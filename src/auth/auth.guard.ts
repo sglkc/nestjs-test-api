@@ -7,8 +7,8 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-import { User } from '../users/user.entity';
-import { UsersService } from '../users/users.service';
+import { User } from '@/users/user.entity';
+import { UsersService } from '@/users/users.service';
 import { SignInDto } from './dto/sign-in.dto';
 
 export const AUTH_SYMBOL = Symbol('AuthGuard');
