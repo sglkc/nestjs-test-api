@@ -7,15 +7,22 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
+import { User } from '../users/user.entity';
+import { UsersService } from '../users/users.service';
 import { SignInDto } from './dto/sign-in.dto';
 
+export const AUTH_SYMBOL = Symbol('AuthGuard');
+
 export interface AuthRequest extends Request {
-  credentials?: SignInDto;
+  [AUTH_SYMBOL]: User;
 }
 
 @Injectable({ scope: Scope.REQUEST })
 export class AuthGuard implements CanActivate {
-  constructor(private jwtService: JwtService) {}
+  constructor(
+    private jwtService: JwtService,
+    private usersService: UsersService,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<AuthRequest>();
@@ -27,10 +34,19 @@ export class AuthGuard implements CanActivate {
 
     try {
       const payload = await this.jwtService.verifyAsync<SignInDto>(token);
-      request.credentials = payload;
+      const user = await this.usersService.findOne({
+        username: payload.username,
+      });
+
+      if (!user) {
+        throw new UnauthorizedException('unauthorized');
+      }
+
+      request[AUTH_SYMBOL] = user;
     } catch {
       throw new UnauthorizedException('unauthorized');
     }
+
     return true;
   }
 
